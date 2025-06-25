@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ColorCraft - Color Palette Generator</title>
+  <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>ColorCraft - Color Palette Generator</h1>
+    <section id="controls">
+      <label for="baseColor">Base Color:</label>
+      <input type="color" id="baseColor" name="baseColor" value="#4a90e2" />
+      <button id="generateBtn" class="display-none">Generate Palette</button>
+      <button id="themeToggleBtn" aria-pressed="false" aria-label="Toggle theme mode">Switch to Dark Mode</button>
+    </section>
+
+    <section id="palette" aria-live="polite" aria-label="Generated color palette">
+      <!-- Palette colors will be appended here -->
+    </section>
+  </main>
+
+  <template id="colorCardTemplate">
+    <div class="color-card">
+      <div class="color-swatch"></div>
+      <div class="color-info">
+        <div class="color-purpose" aria-hidden="true"></div>
+        <div class="color-hex" tabindex="0" title="Click to copy HEX"></div>
+        <div class="color-rgba" tabindex="0" title="Click to copy RGBA"></div>
+        <div class="color-hsl" tabindex="0" title="Click to copy HSL"></div>
+      </div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
