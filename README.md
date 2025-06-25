@@ -1,8 +1,5 @@
-<center>
 <img src="favicon.svg" width="85px" alt="">
-<br>
 <h1> ColorCraft - Color Palette Generator </h1>
-</center>
 
 This is a minimal web app that generates a 5-color design palette based on a base color selected by the user. It's useful for designers and developers who need quick color systems for UI/UX, web apps, and branding.
 
