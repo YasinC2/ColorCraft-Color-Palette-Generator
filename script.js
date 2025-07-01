@@ -170,7 +170,7 @@ function generateFunctionalPalette(baseHex, darkMode = false) {
     // TEXT: mostly light color for good contrast on dark bg
     // Use very light lightness with moderate saturation
     const textL = 0.85;
-    const textS = 0.1;
+    const textS = 0.4;
     const textRGB = hslToRgb(h, textS, textL);
     const textHex = rgbToHex(...textRGB);
 

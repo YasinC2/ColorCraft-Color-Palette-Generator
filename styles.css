@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&display=swap');
 
 :root {
   --color-primary: #4a90e2;
@@ -53,11 +53,23 @@ main {
   color: var(--color-text);
 }
 
-h1 {
+.card-header {
   text-align: center;
-  margin-bottom: 1.5rem;
-  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  margin: 0rem;
+  font-weight: 900;
   color: var(--color-primary);
+  transition: color 0.4s ease;
+}
+
+h2 {
+  margin: 0rem;
+  margin-top: .5rem;
+  font-weight: 700;
+  color: var(--color-text);
   transition: color 0.4s ease;
 }
 
@@ -89,12 +101,13 @@ h1 {
 
 #generateBtn,
 #themeToggleBtn {
+  font-family: inherit;
   padding: 0.6rem 1.4rem;
   background: var(--btn-bg);
   color: var(--btn-text);
   border: none;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1rem;
   cursor: pointer;
   box-shadow: 0 6px 12px var(--btn-shadow);
@@ -195,7 +208,7 @@ h1 {
   padding: 0.25rem 0.5rem;
   border-radius: 3px;
   font-size: 0.75rem;
-  font-family: sans-serif;
+  /* font-family: sans-serif; */
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
