@@ -395,16 +395,82 @@ function shadeColor(hex, percent) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
+// Generate CSS variable code string for a palette, scoped (optional) selector
+function generateCssVariableCode(paletteObj, selector = ":root") {
+  // We'll generate variables for the main colors according to current format:
+  // --color-primary
+  // --color-text
+  // --color-background
+  // --color-secondary-background
+  // --color-secondary
+  // and the HSL parts needed
+
+  const lines = [];
+
+  lines.push(`${selector} {`);
+  lines.push(`  --color-primary: ${paletteObj.primary};`);
+  lines.push(`  --color-text: ${paletteObj.text};`);
+  lines.push(`  --color-background: ${paletteObj.background};`);
+  lines.push(`  --color-secondary-background: ${paletteObj.secondaryBackground};`);
+  lines.push(`  --color-secondary: ${paletteObj.secondary};`);
+  lines.push(`  --color-primary-h: ${paletteObj.primaryH};`);
+  lines.push(`  --color-primary-s: ${paletteObj.primaryS}%;`);
+  lines.push(`  --color-primary-l: ${paletteObj.primaryL}%;`);
+  lines.push(`  --color-secondary-background-h: ${paletteObj.secondaryBgH};`);
+  lines.push(`  --color-secondary-background-s: ${paletteObj.secondaryBgS}%;`);
+  lines.push(`  --color-secondary-background-l: ${paletteObj.secondaryBgL}%;`);
+  lines.push(`  --btn-bg: ${paletteObj.primary};`);
+  lines.push(`  --btn-text: ${paletteObj.background};`);
+
+  // Additional derived colors similarly for buttons hover etc - including:
+  // We'll replicate similar logic for shadeColor and button shadows inline so user can copy fully usable vars:
+
+  const btnHoverColor = shadeColor(paletteObj.primary, -20);
+
+  // Light button hover shadow rgba
+  const hoverRgb = hexToRgb(btnHoverColor);
+  const btnShadowRgba = `rgba(${hoverRgb.r}, ${hoverRgb.g}, ${hoverRgb.b}, 0.5)`;
+  const btnShadowRgbaBase = `rgba(${hexToRgb(paletteObj.primary).r}, ${hexToRgb(paletteObj.primary).g}, ${hexToRgb(paletteObj.primary).b}, 0.3)`;
+
+  lines.push(`  --btn-shadow: ${btnShadowRgbaBase};`);
+  lines.push(`  --btn-hover-bg: ${btnHoverColor};`);
+  lines.push(`  --btn-hover-shadow: ${btnShadowRgba};`);
+  
+  lines.push(`}`);
+
+  return lines.join("\n");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const baseColorInput = document.getElementById('baseColor');
   const generateBtn = document.getElementById('generateBtn');
   const paletteContainer = document.getElementById('palette');
   const themeToggleBtn = document.getElementById('themeToggleBtn');
+
+  const cssLightCodeEl = document.getElementById('cssLightCode');
+  const cssDarkCodeEl = document.getElementById('cssDarkCode');
+  const copyLightBtn = document.getElementById('copyLightBtn');
+  const copyDarkBtn = document.getElementById('copyDarkBtn');
+
   let darkMode = false;
+  let lastLightPalette = null;
+  let lastDarkPalette = null;
 
   function generateAndShow() {
+    // Generate both palettes for display in CSS code section regardless of darkMode toggle state
     const baseColor = baseColorInput.value;
-    const paletteObj = generateFunctionalPalette(baseColor, darkMode);
+
+    // Generate light palette
+    const lightPalette = generateFunctionalPalette(baseColor, false);
+    lastLightPalette = lightPalette;
+
+    // Generate dark palette
+    const darkPalette = generateFunctionalPalette(baseColor, true);
+    lastDarkPalette = darkPalette;
+
+    // Show palette cards for current mode only
+    const paletteObj = darkMode ? darkPalette : lightPalette;
+
     paletteContainer.innerHTML = '';
     const entries = [
       {hex: paletteObj.primary, label: 'Primary (Highlight)', hsl: paletteObj.primaryHSL},
@@ -426,6 +492,31 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       document.body.classList.remove('dark-theme');
     }
+
+    // Update the CSS variables code textareas with the latest palettes
+
+    // Light theme code uses :root selector
+    cssLightCodeEl.textContent = generateCssVariableCode(lightPalette, ":root");
+
+    // Dark theme code uses `.dark` class on html element selector
+    cssDarkCodeEl.textContent = generateCssVariableCode(darkPalette, "html.dark");
+  }
+
+  // Copy CSS code helper for buttons
+  function copyCssCode(text, buttonEl) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        buttonEl.textContent = 'Copied!';
+        setTimeout(() => {
+          buttonEl.textContent = buttonEl.getAttribute('aria-label').includes('light') ? 'Copy Light Variables' : 'Copy Dark Variables';
+        }, 1500);
+      })
+      .catch(() => {
+        buttonEl.textContent = 'Failed to copy';
+        setTimeout(() => {
+          buttonEl.textContent = buttonEl.getAttribute('aria-label').includes('light') ? 'Copy Light Variables' : 'Copy Dark Variables';
+        }, 1500);
+      });
   }
 
   generateBtn.addEventListener('click', generateAndShow);
@@ -437,6 +528,14 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleBtn.textContent = darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
     themeToggleBtn.setAttribute('aria-pressed', darkMode.toString());
     generateAndShow();
+  });
+
+  copyLightBtn.addEventListener('click', () => {
+    copyCssCode(cssLightCodeEl.textContent, copyLightBtn);
+  });
+
+  copyDarkBtn.addEventListener('click', () => {
+    copyCssCode(cssDarkCodeEl.textContent, copyDarkBtn);
   });
 
   // Generate initial palette on load

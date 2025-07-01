@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ColorCraft - Color Palette Generator</title>
-    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
 
@@ -24,6 +24,20 @@
 
       <section id="palette" aria-live="polite" aria-label="Generated color palette">
         <!-- Palette colors will be appended here -->
+      </section>
+
+      <section id="cssVariablesSection" aria-live="polite" aria-label="Generated CSS color variables" style="margin-top:2rem;">
+        <h3>Generated CSS Variables</h3>
+        <div id="css-vars-light" class="css-vars-block" aria-label="Light theme CSS variables">
+          <h4>Light Theme Variables</h4>
+          <pre tabindex="0" id="cssLightCode" class="code-block"></pre>
+          <button id="copyLightBtn" class="copy-css-btn" aria-label="Copy light theme CSS variables to clipboard">Copy Light Variables</button>
+        </div>
+        <div id="css-vars-dark" class="css-vars-block" aria-label="Dark theme CSS variables" style="margin-top:1.5rem;">
+          <h4>Dark Theme Variables</h4>
+          <pre tabindex="0" id="cssDarkCode" class="code-block"></pre>
+          <button id="copyDarkBtn" class="copy-css-btn" aria-label="Copy dark theme CSS variables to clipboard">Copy Dark Variables</button>
+        </div>
       </section>
     </main>
 
